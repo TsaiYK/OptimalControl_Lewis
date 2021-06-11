@@ -46,28 +46,3 @@ end
 %% Gain calculation (slopes)
 xi_step = xi0(2)-xi0(1);
 slope = (u_opt((length(xi0)-1)/2+1,:)-u_opt((length(xi0)-1)/2+2,:))/xi_step;
-
-%% Dynamic simulation
-xi(1,1) = 10; % initial state
-k = 1:10;
-u = slope*xi(1,1);
-saturated_u = min(u_max, max(-u_max, u));
-for i = 1:length(k)
-    xi(i+1) = para.a*xi(i)+para.b*saturated_u(i);
-end
-
-% Performance evaluation
-Psi = 1/2*(sum(xi(1:end-1).^2)+sum(saturated_u.^2))+1/2*para.qN*xi(end)^2
-
-figure
-subplot(2,1,1)
-plot([k,11],xi); grid on
-xlim([1,11])
-ylabel('$\xi$', 'FontSize', 15, 'Interpreter', 'Latex')
-
-subplot(2,1,2)
-plot(k,saturated_u); grid on
-xlim([1,11])
-xlabel('$k$', 'FontSize', 15, 'Interpreter', 'Latex')
-ylabel('$u$', 'FontSize', 15, 'Interpreter', 'Latex')
-
